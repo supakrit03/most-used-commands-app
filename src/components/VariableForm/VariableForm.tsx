@@ -1,7 +1,27 @@
-type Props = {};
+export type FormValues = {
+  name: string;
+  value: string;
+};
 
-const VariableForm = (props: Props) => {
-  const handleSubmit = () => {};
+type Props = {
+  onSubmit: (values: FormValues) => void;
+};
+
+const VariableForm = ({ onSubmit }: Props) => {
+  const handleSubmit = (e: Event) => {
+    e.preventDefault();
+
+    const form = e.target as HTMLFormElement;
+    const name = form["variableName"].value;
+    const value = form["variableValue"].value;
+
+    onSubmit({
+      name,
+      value,
+    });
+
+    form.reset();
+  };
 
   return (
     <form

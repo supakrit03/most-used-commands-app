@@ -4,21 +4,17 @@ type Props = {
   commands: CommandLine[];
   onClickEditItem: (commandLine: CommandLine) => void;
   onClickDeleteItem: (slug: string) => void;
+  onCopyToClipboard: (command: string) => void;
+  onClickCopyWithValue: (command: string) => void;
 };
 
 const CommandList = ({
   commands,
   onClickEditItem,
   onClickDeleteItem,
+  onCopyToClipboard,
+  onClickCopyWithValue,
 }: Props) => {
-  const copyToClipboard = (command: string) => {
-    window.navigator.clipboard.writeText(command);
-  };
-
-  const copyWithValue = (command: string) => {
-    // get variable and replace template string
-  };
-
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
       {commands.length === 0 && <div>No commands</div>}
@@ -49,10 +45,10 @@ const CommandList = ({
             >
               <span>{command.icon} </span>
               <span>{command.name}</span>
-              <button onClick={() => copyToClipboard(command.command)}>
+              <button onClick={() => onCopyToClipboard(command.command)}>
                 Copy
               </button>
-              <button onClick={() => copyWithValue(command.command)}>
+              <button onClick={() => onClickCopyWithValue(command.command)}>
                 Copy with value
               </button>
             </div>

@@ -1,22 +1,19 @@
 import { useEffect, useState } from "preact/hooks";
 import "./app.css";
-import { CommandLine } from "./components/CommandList/types";
 import CommandList from "./components/CommandList";
 import CommandForm from "./components/CommandForm";
 import VariableForm from "./components/VariableForm";
 import VariableList from "./components/VariableList";
-import type { FormValues } from "./components/CommandForm/CommandForm";
-import { VariableEnv } from "./components/VariableList/types";
 import { nameToSlug } from "./functions";
+import type { FormValues as CommandValues } from "./components/CommandForm/CommandForm";
+import type { FormValues as VariableValues } from "./components/VariableForm/VariableForm";
+
+import type { CommandLine } from "./components/CommandList/types";
+import type { VariableEnv } from "./components/VariableList/types";
 
 export function App() {
   const [commands, setCommands] = useState<CommandLine[]>([]);
-  const [variables, setVariables] = useState<VariableEnv[]>([
-    {
-      name: "username",
-      value: "supakrit.jitklang@lseg.com",
-    },
-  ]);
+  const [variables, setVariables] = useState<VariableEnv[]>([]);
 
   const [selectedCommand, setSelectedCommand] = useState<CommandLine>();
 
@@ -24,9 +21,11 @@ export function App() {
   const [showVariableForm, setShowVariableForm] = useState(false);
 
   const COMMANDS_KEY = "commands";
+  const VARIABLES_KEY = "variables";
 
   useEffect(() => {
     setCommands(getCommands());
+    setVariables(getVariables());
   }, []);
 
   const getCommands = () => {
@@ -37,7 +36,20 @@ export function App() {
     return commands;
   };
 
-  const onSubmitForm = ({ slug, icon, name, command }: FormValues) => {
+  const getVariables = () => {
+    const variables: VariableEnv[] = JSON.parse(
+      localStorage.getItem(VARIABLES_KEY) ?? "[]"
+    );
+
+    return variables;
+  };
+
+  const onSubmitCommandForm = ({
+    slug,
+    icon,
+    name,
+    command,
+  }: CommandValues) => {
     const commands = getCommands();
 
     if (selectedCommand) {
@@ -64,6 +76,20 @@ export function App() {
     setCommands(getCommands());
   };
 
+  const onSubmitVariableForm = ({ name, value }: VariableValues) => {
+    const variables = getVariables();
+
+    variables.push({
+      slug: nameToSlug(name),
+      name,
+      value,
+    });
+
+    setShowVariableForm(false);
+    localStorage.setItem(VARIABLES_KEY, JSON.stringify(variables));
+    setVariables(getVariables());
+  };
+
   const onClickEditItem = (command: CommandLine) => {
     setShowCommandForm(true);
     setSelectedCommand(command);
@@ -76,6 +102,20 @@ export function App() {
     );
 
     setCommands(getCommands());
+  };
+
+  const onCopyToClipboard = (command: string) => {
+    window.navigator.clipboard.writeText(command);
+  };
+
+  const onClickCopyWithValue = (command: string) => {
+    let commandReplaced = "";
+    for (let index = 0; index < variables.length; index++) {
+      const { name, value } = variables[index];
+      commandReplaced = command.replace(`{{${name}}}`, value);
+    }
+
+    window.navigator.clipboard.writeText(commandReplaced);
   };
 
   return (
@@ -107,9 +147,9 @@ export function App() {
       </div>
 
       {showCommandForm && (
-        <CommandForm onSubmit={onSubmitForm} command={selectedCommand} />
+        <CommandForm onSubmit={onSubmitCommandForm} command={selectedCommand} />
       )}
-      {showVariableForm && <VariableForm />}
+      {showVariableForm && <VariableForm onSubmit={onSubmitVariableForm} />}
 
       <div
         style={{
@@ -122,6 +162,8 @@ export function App() {
             commands={commands}
             onClickEditItem={onClickEditItem}
             onClickDeleteItem={onClickDeleteItem}
+            onCopyToClipboard={onCopyToClipboard}
+            onClickCopyWithValue={onClickCopyWithValue}
           />
         </div>
         <div style={{ flex: 1 }}>
