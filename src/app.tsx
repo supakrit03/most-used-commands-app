@@ -15,7 +15,9 @@ export function App() {
   const [commands, setCommands] = useState<CommandLine[]>([]);
   const [variables, setVariables] = useState<VariableEnv[]>([]);
 
-  const [selectedCommand, setSelectedCommand] = useState<CommandLine>();
+  const [selectedCommand, setSelectedCommand] = useState<CommandLine | null>(
+    null
+  );
 
   const [showCommandForm, setShowCommandForm] = useState(false);
   const [showVariableForm, setShowVariableForm] = useState(false);
@@ -72,6 +74,7 @@ export function App() {
     }
 
     setShowCommandForm(false);
+    setSelectedCommand(null);
     localStorage.setItem(COMMANDS_KEY, JSON.stringify(commands));
     setCommands(getCommands());
   };
@@ -112,7 +115,11 @@ export function App() {
     let commandReplaced = "";
     for (let index = 0; index < variables.length; index++) {
       const { name, value } = variables[index];
-      commandReplaced = command.replace(`{{${name}}}`, value);
+      if (commandReplaced == "") {
+        commandReplaced = command.replace(`{{${name}}}`, value);
+      } else {
+        commandReplaced = commandReplaced.replace(`{{${name}}}`, value);
+      }
     }
 
     window.navigator.clipboard.writeText(commandReplaced);

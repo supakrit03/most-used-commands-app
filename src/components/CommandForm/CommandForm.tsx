@@ -9,7 +9,7 @@ export type FormValues = {
 };
 
 type Props = {
-  command?: CommandLine;
+  command: CommandLine | null;
   onSubmit: (values: FormValues) => void;
 };
 
