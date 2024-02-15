@@ -132,6 +132,10 @@ export function App() {
     setShowCommandForm(false);
   };
 
+  const onCloseVariableForm = () => {
+    setShowVariableForm(false);
+  };
+
   return (
     <section>
       <h1 className="text-3xl font-bold underline">Most used commands</h1>
@@ -184,7 +188,7 @@ export function App() {
         <CommandForm onSubmit={onSubmitCommandForm} command={selectedCommand} />
       </Modal>
 
-      <Modal visible={showVariableForm} onCancel={onCloseCommandForm}>
+      <Modal visible={showVariableForm} onCancel={onCloseVariableForm}>
         <VariableForm onSubmit={onSubmitVariableForm} />
       </Modal>
     </section>
