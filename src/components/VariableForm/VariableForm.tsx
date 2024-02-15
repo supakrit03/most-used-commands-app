@@ -1,3 +1,5 @@
+import Button from "../Button";
+
 export type FormValues = {
   name: string;
   value: string;
@@ -44,7 +46,7 @@ const VariableForm = ({ onSubmit }: Props) => {
         name="variableValue"
         placeholder="Variable value"
       />
-      <button type="summit">ADD</button>
+      <Button>ADD</Button>
     </form>
   );
 };

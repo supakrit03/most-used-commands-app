@@ -1,4 +1,5 @@
 import { nameToSlug } from "../../functions";
+import Button from "../Button";
 import { CommandLine } from "../CommandList/types";
 
 export type FormValues = {
@@ -57,7 +58,7 @@ const CommandForm = ({ command, onSubmit }: Props) => {
         value={command?.command}
       />
 
-      <button type="summit"> {isEdit ? "EDIT" : "ADD"} </button>
+      <Button> {isEdit ? "EDIT" : "ADD"} </Button>
     </form>
   );
 };

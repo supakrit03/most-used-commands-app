@@ -1,5 +1,7 @@
 import type { CommandLine } from "./types";
 
+import Button from "../Button";
+
 type Props = {
   commands: CommandLine[];
   onClickEditItem: (commandLine: CommandLine) => void;
@@ -45,28 +47,28 @@ const CommandList = ({
             >
               <span>{command.icon} </span>
               <span>{command.name}</span>
-              <button onClick={() => onCopyToClipboard(command.command)}>
+              <Button onClick={() => onCopyToClipboard(command.command)}>
                 Copy
-              </button>
-              <button onClick={() => onClickCopyWithValue(command.command)}>
+              </Button>
+              <Button onClick={() => onClickCopyWithValue(command.command)}>
                 Copy with value
-              </button>
+              </Button>
             </div>
             <div>
-              <button
+              <Button
                 onClick={() => {
                   onClickEditItem(command);
                 }}
               >
                 Edit
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => {
                   onClickDeleteItem(command.slug);
                 }}
               >
                 Delete
-              </button>
+              </Button>
             </div>
           </div>
           <pre>

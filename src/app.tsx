@@ -1,15 +1,18 @@
+import "./index.css";
+
 import { useEffect, useState } from "preact/hooks";
-import "./app.css";
 import CommandList from "./components/CommandList";
 import CommandForm from "./components/CommandForm";
 import VariableForm from "./components/VariableForm";
 import VariableList from "./components/VariableList";
+import Modal from "./components/Modal";
 import { nameToSlug } from "./functions";
+
 import type { FormValues as CommandValues } from "./components/CommandForm/CommandForm";
 import type { FormValues as VariableValues } from "./components/VariableForm/VariableForm";
-
 import type { CommandLine } from "./components/CommandList/types";
 import type { VariableEnv } from "./components/VariableList/types";
+import Button from "./components/Button";
 
 export function App() {
   const [commands, setCommands] = useState<CommandLine[]>([]);
@@ -125,9 +128,13 @@ export function App() {
     window.navigator.clipboard.writeText(commandReplaced);
   };
 
+  const onCloseCommandForm = () => {
+    setShowCommandForm(false);
+  };
+
   return (
     <section>
-      <h1>Most used commands</h1>
+      <h1 className="text-3xl font-bold underline">Most used commands</h1>
 
       <div
         style={{
@@ -137,26 +144,21 @@ export function App() {
           marginBottom: "6px",
         }}
       >
-        <button
+        <Button
           onClick={() => {
             setShowCommandForm(true);
           }}
         >
           Add commands
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => {
             setShowVariableForm(true);
           }}
         >
           Add variables
-        </button>
+        </Button>
       </div>
-
-      {showCommandForm && (
-        <CommandForm onSubmit={onSubmitCommandForm} command={selectedCommand} />
-      )}
-      {showVariableForm && <VariableForm onSubmit={onSubmitVariableForm} />}
 
       <div
         style={{
@@ -177,6 +179,14 @@ export function App() {
           <VariableList variables={variables} />
         </div>
       </div>
+
+      <Modal visible={showCommandForm} onCancel={onCloseCommandForm}>
+        <CommandForm onSubmit={onSubmitCommandForm} command={selectedCommand} />
+      </Modal>
+
+      <Modal visible={showVariableForm} onCancel={onCloseCommandForm}>
+        <VariableForm onSubmit={onSubmitVariableForm} />
+      </Modal>
     </section>
   );
 }
