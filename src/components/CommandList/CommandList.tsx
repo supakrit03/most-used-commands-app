@@ -7,7 +7,7 @@ type Props = {
   onClickEditItem: (commandLine: CommandLine) => void;
   onClickDeleteItem: (slug: string) => void;
   onCopyToClipboard: (command: string) => void;
-  onClickCopyWithValue: (command: string) => void;
+  onClickCopyWithValue: (slug: string, command: string) => void;
 };
 
 const CommandList = ({
@@ -50,7 +50,11 @@ const CommandList = ({
               <Button onClick={() => onCopyToClipboard(command.command)}>
                 Copy
               </Button>
-              <Button onClick={() => onClickCopyWithValue(command.command)}>
+              <Button
+                onClick={() =>
+                  onClickCopyWithValue(command.slug, command.command)
+                }
+              >
                 Copy with value
               </Button>
             </div>

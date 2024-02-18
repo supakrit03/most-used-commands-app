@@ -42,7 +42,12 @@ const CommandForm = ({ command, onSubmit }: Props) => {
       }}
       onSubmit={handleSubmit}
     >
-      <input type="text" name="icon" placeholder="Icon" value={command?.icon} />
+      <input
+        type="text"
+        name="icon"
+        placeholder="Icon"
+        value={command?.icon ?? "⚡️"}
+      />
       <input
         required
         type="text"
