@@ -1,8 +1,6 @@
 import { getFromLocalStorage } from "../services/statistic";
 
-type Props = {};
-
-const Statistic = (props: Props) => {
+const Statistic = () => {
   return (
     <div>
       <pre>{JSON.stringify(getFromLocalStorage(), null, 2)}</pre>
