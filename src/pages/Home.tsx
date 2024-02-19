@@ -86,13 +86,14 @@ export default function Home() {
     setCommands(getCommands());
   };
 
-  const onSubmitVariableForm = ({ name, value }: VariableValues) => {
+  const onSubmitVariableForm = ({ name, value, isSecret }: VariableValues) => {
     const variables = getVariables();
 
     variables.push({
       slug: nameToSlug(name),
       name,
       value,
+      isSecret,
     });
 
     setShowVariableForm(false);
@@ -119,19 +120,37 @@ export default function Home() {
   };
 
   const onClickCopyWithValue = (slug: string, command: string) => {
-    let commandReplaced = "";
+    let commandReplacedValue = "";
+    let copiedCommand = "";
+
+    const replaceCommand = (
+      command: string,
+      name: string,
+      value: string,
+      isSecret?: boolean
+    ) => command.replace(`{{${name}}}`, isSecret ? "****" : value);
+
     for (let index = 0; index < variables.length; index++) {
-      const { name, value } = variables[index];
-      if (commandReplaced == "") {
-        commandReplaced = command.replace(`{{${name}}}`, value);
+      const { name, value, isSecret } = variables[index];
+
+      if (commandReplacedValue == "") {
+        commandReplacedValue = replaceCommand(command, name, value);
+        copiedCommand = replaceCommand(command, name, value, isSecret);
       } else {
-        commandReplaced = commandReplaced.replace(`{{${name}}}`, value);
+        commandReplacedValue = replaceCommand(
+          commandReplacedValue,
+          name,
+          value
+        );
+
+        copiedCommand = replaceCommand(copiedCommand, name, value, isSecret);
       }
     }
 
-    window.navigator.clipboard.writeText(commandReplaced);
+    window.navigator.clipboard.writeText(commandReplacedValue);
     setIsVisibleToast(true);
-    setCopiedCommand(commandReplaced);
+
+    setCopiedCommand(copiedCommand);
     counterUsedCommand(slug);
 
     setTimeout(() => {

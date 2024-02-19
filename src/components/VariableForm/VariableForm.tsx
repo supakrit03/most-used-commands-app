@@ -3,6 +3,7 @@ import Button from "../Button";
 export type FormValues = {
   name: string;
   value: string;
+  isSecret: boolean;
 };
 
 type Props = {
@@ -16,10 +17,12 @@ const VariableForm = ({ onSubmit }: Props) => {
     const form = e.target as HTMLFormElement;
     const name = form["variableName"].value;
     const value = form["variableValue"].value;
+    const isSecret = form["variableIsSecret"].checked;
 
     onSubmit({
       name,
       value,
+      isSecret,
     });
 
     form.reset();
@@ -46,6 +49,11 @@ const VariableForm = ({ onSubmit }: Props) => {
         name="variableValue"
         placeholder="Variable value"
       />
+      <div className="flex gap-2">
+        <input type="checkbox" id="variableIsSecret" name="variableIsSecret" />
+        <label for="variableIsSecret">Secret</label>
+      </div>
+
       <Button>ADD</Button>
     </form>
   );

@@ -1,4 +1,5 @@
-import { VariableEnv } from "./types";
+import SecretVariable from "./SecretVariable";
+import type { VariableEnv } from "./types";
 
 type Props = {
   variables: VariableEnv[];
@@ -22,7 +23,12 @@ const VariableList = ({ variables }: Props) => {
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 "
             >
               <td className="px-2 py-2">{variable.name}</td>
-              <td>{variable.value}</td>
+              <td>
+                <SecretVariable
+                  isSecret={variable.isSecret}
+                  text={variable.value}
+                />
+              </td>
             </tr>
           ))}
         </tbody>
