@@ -168,8 +168,6 @@ export default function Home() {
 
   return (
     <section>
-      <h1 className="text-3xl font-bold underline">Most used commands</h1>
-
       <div
         style={{
           display: "flex",

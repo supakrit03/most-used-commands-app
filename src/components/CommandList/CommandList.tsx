@@ -19,7 +19,7 @@ const CommandList = ({
 }: Props) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-      {commands.length === 0 && <div>No commands</div>}
+      {commands.length === 0 && <div>No commands , Add your command.</div>}
       {commands.map((command, index) => (
         <div
           key={index}
