@@ -23,28 +23,10 @@ const CommandList = ({
       {commands.map((command, index) => (
         <div
           key={index}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            padding: "8px",
-          }}
+          className="flex flex-col border border-solid border-gray-300 p-4 rounded-md gap-2"
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-              }}
-            >
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
               <span>{command.icon} </span>
               <span>{command.name}</span>
               <Button onClick={() => onCopyToClipboard(command.command)}>
@@ -58,7 +40,7 @@ const CommandList = ({
                 Copy with value
               </Button>
             </div>
-            <div>
+            <div className="flex gap-2">
               <Button
                 onClick={() => {
                   onClickEditItem(command);

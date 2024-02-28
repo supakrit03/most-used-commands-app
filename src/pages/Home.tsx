@@ -18,6 +18,8 @@ import type { VariableEnv } from "../components/VariableList/types";
 
 export default function Home() {
   const [commands, setCommands] = useState<CommandLine[]>([]);
+  const [searchText, setSearchText] = useState<string>("");
+
   const [variables, setVariables] = useState<VariableEnv[]>([]);
   const [copiedCommand, setCopiedCommand] = useState("");
 
@@ -166,30 +168,48 @@ export default function Home() {
     setShowVariableForm(false);
   };
 
+  const onSearch = (text: string) => {
+    setSearchText(text);
+  };
+
+  const filterCommands = (commands: CommandLine[]) => {
+    if (!searchText) return commands;
+
+    return commands.filter(
+      (command) =>
+        command.name.indexOf(searchText) !== -1 ||
+        command.command.indexOf(searchText) !== -1
+    );
+  };
+
   return (
     <section>
-      <div
-        style={{
-          display: "flex",
-          gap: "4px",
-          justifyContent: "right",
-          marginBottom: "6px",
-        }}
-      >
-        <Button
-          onClick={() => {
-            setShowCommandForm(true);
+      <div className="flex justify-between m-2 gap-4">
+        <input
+          type="text"
+          placeholder="Search"
+          className="w-80 border border-solid border-gray-300 rounded-md p-2"
+          onKeyUp={(e) => {
+            onSearch((e.target as HTMLInputElement).value);
           }}
-        >
-          Add commands
-        </Button>
-        <Button
-          onClick={() => {
-            setShowVariableForm(true);
-          }}
-        >
-          Add variables
-        </Button>
+        />
+
+        <div class="flex gap-2">
+          <Button
+            onClick={() => {
+              setShowCommandForm(true);
+            }}
+          >
+            Add commands
+          </Button>
+          <Button
+            onClick={() => {
+              setShowVariableForm(true);
+            }}
+          >
+            Add variables
+          </Button>
+        </div>
       </div>
 
       <div
@@ -200,7 +220,7 @@ export default function Home() {
       >
         <div style={{ flex: 5 }}>
           <CommandList
-            commands={commands}
+            commands={filterCommands(commands)}
             onClickEditItem={onClickEditItem}
             onClickDeleteItem={onClickDeleteItem}
             onCopyToClipboard={onCopyToClipboard}
